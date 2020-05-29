@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+    <title>HTML Canvas 04 - Event Listeners (Key)</title>
+	
+    <style>
+	
+		* {
+			margin: 0px;
+			padding: 0px;
+			box-sizing: border-box;	
+		}
+		
+		html, body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;	
+		}
+		
+		#myCanvas {
+			display: block;	
+		}
+		
+	</style>
+</head>
+
+<body>
+	
+    <canvas id="myCanvas" tabindex="1"></canvas>
+    
+	<script>
+    
+	var canvas = document.getElementById("myCanvas");	//adds a reference to #myCanvas and stores it in a variable.
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	
+	var c = canvas.getContext("2d");
+	
+	var colour = "rgba(200, 100, 0, 0.5)";
+	var strokeColour = "rgba(100, 0, 200, 0.5)";
+	var lineWidth = 5;
+	
+	var radius = 50;
+	var x = canvas.width / 2 - radius / 2
+	var y = canvas.height / 2 - radius / 2
+	
+	var moving = true;
+	var lastx = 0;
+	var lasty = 0;
+	
+	var dx = 2;
+	var dy = 4;
+	
+	canvas.addEventListener("keydown", moveBox);
+	
+	function animate() {
+		
+		requestAnimationFrame(animate);
+		
+		c.clearRect(0, 0, canvas.width, canvas.height);
+		
+		c.beginPath();
+		c.strokeStyle = strokeColour;
+		c.lineWidth = lineWidth;
+		
+		c.arc(x, y, radius, 0, Math.PI*2, true);
+		c.fillStyle = colour;
+		c.fill();
+		c.stroke();
+	
+		if (x > canvas.width - radius || x < 0 + radius) { 
+			dx = -dx;
+		}
+		if (y > canvas.height - radius || y < 0 + radius) {
+			dy = -dy;	
+		}
+		
+		x += dx;
+		y += dy;
+	}
+	
+	function moveBox(e) {
+		if (e.keyCode == 70) {
+			lineWidth = lineWidth + 5;	
+		}
+		if (e.keyCode == 71) {
+			lineWidth = lineWidth - 5;
+		}
+		if (e.keyCode == 79) {
+			if (strokeColour ==  "rgba(100, 0, 200, 0.5)") {
+				strokeColour = "rgba(200, 200, 75, 0.5)";
+			}
+			else {
+				strokeColour =  "rgba(100, 0, 200, 0.5)";
+			}
+		}
+		if (e.keyCode == 67) {
+			if (colour == "rgba(200, 100, 0, 0.5)") {
+				colour = "rgba(0, 200, 100, 0.5)";
+			}
+			else {
+				colour = "rgba(200, 100, 0, 0.5)"
+			}
+		}
+		if (e.keyCode == 88) { 
+			dx = -dx;
+		}
+		if (e.keyCode == 89) {
+			dy = -dy;	
+		}
+		if (e.keyCode == 66) {
+			radius = radius + 20;	
+		}
+		if (e.keyCode == 83) {
+			radius = radius - 20;	
+		}
+		if (e.keyCode == 32 && moving == true) {
+				moving = false;
+				lastx = dx;
+				lasty = dy;
+				dx = 0;
+				dy = 0;
+
+		} 
+		else if (e.keyCode == 32 && moving == false) {
+				moving = true;
+				dx = lastx
+				dy = lasty;	
+		}
+		else if (e.keyCode == 37) {
+			//move box left decrease velocity
+			if (dx > 0) {
+				dx -= 1;
+			}
+			else if (dx < 0){
+				dx += 1;
+			}
+			
+			if (dy > 0) {
+				dy -= 1;
+			}
+			else if (dy < 0) {
+				dy += 1;	
+			}
+		}
+		else if (e.keyCode == 39) {
+			//move box right increase velocity
+			if (dx <= 0) {
+				dx -= 1;
+			}
+			else if (dx >= 0){
+				dx += 1;
+			}
+			
+			if (dy <= 0) {
+				dy -= 1;
+			}
+			else if (dy >= 0) {
+				dy += 1;	
+			}
+		}
+		
+	}
+	
+	animate();
+    </script>
+</body>
+
+</html>
